@@ -4,6 +4,7 @@ import {fetchCloudProviders} from "../API";
 
 const CloudProviderList: React.FC = () => {
     const [provider, setProvider] = React.useState('all')
+    const [nearest, setNearest] = React.useState('0');
     const [latitude, setLatitude] = React.useState('0');
     const [longitude, setLongitude] = React.useState('0');
     const [clouds, setClouds] = React.useState([{
@@ -11,6 +12,11 @@ const CloudProviderList: React.FC = () => {
         cloud_name: '',
         geo_region: ''
     }])
+
+    React.useEffect(() => {
+        getData();
+    }, [])
+
 
     const setCoords = () => {
         // Logic to set current coordinates
@@ -28,12 +34,16 @@ const CloudProviderList: React.FC = () => {
 
     const getData = async () => {
         setCoords();
-        setClouds(await fetchCloudProviders(provider, 1, latitude, longitude));
+        setClouds(await fetchCloudProviders(provider, nearest, latitude, longitude));
     }
+
 
     const providerChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setProvider(event.target.value);
-        getData();
+    }
+
+    const nearestChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setNearest(event.target.value)
     }
 
     const renderTableData = () => {
@@ -62,16 +72,19 @@ const CloudProviderList: React.FC = () => {
                         <option value="google">Google Cloud Platform</option>
                     </select>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                     <div className="form-check">
-                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                            <label className="form-check-label" htmlFor="flexCheckDefault">
-                                Nearest Region
-                            </label>
+                        <select className="form-select form-select-sm" id="flexCheckDefault"
+                            aria-label=".form-select-sm example" value={nearest}
+                            onChange={nearestChange}>
+                        <option value="0">All Regions</option>
+                        <option value="1">Nearest Regions</option>
+                    </select>
                     </div>
                 </div>
-                <div className="col-4">
-                    <button onClick={getData} className="btn btn-primary pull-right">Get Data</button>
+                <div className="col-5">
+                    <button title="Click to retrieve data"
+                            onClick={getData} className="btn btn-primary float-end">Apply Filter</button>
                 </div>
             </div>
 

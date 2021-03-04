@@ -1,5 +1,6 @@
 import math
 import requests
+from distutils.util import strtobool
 
 from django.http import JsonResponse
 
@@ -8,7 +9,7 @@ def clouds(request):
     result = []
     api_url = 'https://api.aiven.io/v1/clouds'
     provider = request.GET.get('provider', 'all')
-    nearest = int(request.GET.get('nearest', 0))
+    nearest = strtobool(request.GET.get('nearest', 'false'))
     current_coords = (float(request.GET.get('latitude')), float(request.GET.get('longitude')))
 
     try:
@@ -25,7 +26,7 @@ def clouds(request):
             'geo_region': data['geo_region'],
             'distance': haversine(
                 current_coords,
-                (int(data['geo_latitude']), int(data['geo_longitude'])))
+                (float(data['geo_latitude']), float(data['geo_longitude'])))
         })
 
     result = get_nearest(nearest, result)
