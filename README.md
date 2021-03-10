@@ -35,6 +35,14 @@ Django Server
 
 ### Instruction to Setup
 - CD into client
-- Do `npm start`
+- Do `npm -i start`
 - Make sure server is running already at `http://127.0.0.1:8000/` or some other host
 - If server host URL is different update the url in API.tsx file
+
+## Deploy Application on Docker Container Locally
+
+- Requirements (docker and docker-compose)
+- CD root of the Project
+- Do `docker-compose build` (It will take few minutes to build)
+- Do `docker-compose up`
+- Visit `localhost:3000` in the browser
